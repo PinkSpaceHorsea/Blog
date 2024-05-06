@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Blog.Models.Post>
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<h2>Latest Blog Posts</h2>
+
+@if (Model.Any())
+{
+    <div class="post-list">
+        @foreach (var post in Model)
+        {
+            <div class="post">
+                <h3>@post.Title</h3>
+                <p>@post.Content</p>
+                @*<p><strong>Posted by:</strong> @post.Author.UserName</p> *@<!-- Assuming you have a user model with UserName property -->
+                <p>
+                    <strong>Posted at:</strong> @post.CreatedAt.ToString("MMMM dd, yyyy HH:mm")  <a asp-action="Edit" asp-route-id="@post.Id">Edit</a>  <a asp-action="Delete" asp-route-id="@post.Id">Delete</a>  <a asp-action="Details" asp-route-id="@post.Id">Details</a>
+                    <br /><strong>Updated at:</strong> @post.UpdatedAt?.ToString("MMMM dd, yyyy HH:mm")
+                </p>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No blog posts found.</p>
+}

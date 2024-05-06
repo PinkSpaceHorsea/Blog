@@ -1,0 +1,52 @@
+﻿@model Blog.Models.Post
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h1>@Model.Title</h1>
+
+<div>
+    <hr />
+    <div class="post">
+        <p>@Model.Content</p>
+        @*<p><strong>Posted by:</strong> @post.Author.UserName</p> *@<!-- Assuming you have a user model with UserName property -->
+        <p>
+            <strong>Posted at:</strong> @Model.CreatedAt.ToString("MMMM dd, yyyy HH:mm") 
+            <br /><strong>Updated at:</strong> @Model.UpdatedAt?.ToString("MMMM dd, yyyy HH:mm")
+        </p>
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<hr />
+<h3>Comments</h3>
+@if (Model.Comments.Any())
+{
+    foreach (var comment in Model.Comments)
+    {
+        <div>
+            <p>@comment.Content</p>
+            <p><strong>Posted at:</strong> @comment.CreatedAt.ToString("MMMM dd, yyyy, HH:mm")</p>
+        </div>
+    }
+}
+else
+{
+    <p>No comments yet.</p>
+}
+
+<h3>Add a Comment</h3>
+<form asp-controller="Comments" asp-action="Create" method="post">
+    <input type="hidden" name="postId" value="@Model.Id" />
+    <div class="form-group">
+        <label asp-for="Content">Content</label>
+        <textarea asp-for="Content" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
